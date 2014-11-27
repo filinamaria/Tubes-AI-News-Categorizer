@@ -3,7 +3,40 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Tweet Analytics</title>
+        
+        <link href="css/screen.css" rel="stylesheet" type="text/css" />
+        <link href="css/jquery.fullPage.css" rel="stylesheet" type="text/css"/>
+        <script src='http://code.jquery.com/jquery-1.7.1.min.js'></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="jquery/jquery.fullPage.js"></script>
+        
+        <script type="text/javascript">
+		$(document).ready(function() {
+			$('#fullpage').fullpage({
+                                slidesColor: ['#44c8f5', '#4BBFC3'],
+				anchors: ['main', 'about'],
+                                scrollingSpeed: 800,
+                                afterLoad: function(anchorLink){
+                                    if(anchorLink == 'about'){
+                                        $('#section2').find('.intro').delay(500).animate({
+                                                left: '0%'
+                                        }, 1500, 'easeOutExpo');
+                                        $('#section2').find('.intro2').delay(600).animate({
+                                                left: '0%'
+                                        }, 1500, 'easeOutExpo');
+                                        $('#section2').find('.intro3').delay(700).animate({
+                                                left: '0%'
+                                        }, 1500, 'easeOutExpo');
+                                        $('#section2').find('.intro4').delay(800).animate({
+                                                left: '0%'
+                                        }, 1500, 'easeOutExpo');
+                                    }
+				}
+			});
+		});
+	</script>
     </h:head>
     <h:body>
         Hello from Facelets
