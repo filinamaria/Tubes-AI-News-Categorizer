@@ -22,6 +22,16 @@
         position:relative;
 }
 
+#section2 .intro5{
+        left: -130%;
+        position:relative;
+}
+
+#section2 .intro6{
+        left: -130%;
+        position:relative;
+}
+
 #header1, #header2{
 	position: absolute;
 	height: 20px;
