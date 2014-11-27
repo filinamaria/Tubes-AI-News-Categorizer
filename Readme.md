@@ -1,5 +1,6 @@
 
 Finalisasi kerjaan hari ini (27 November 2014):
+
 1. bikin kelas java, nama terserah
 2. bikin method buat connect ke database mysql
 3. query db "select JUDUL, FULL_TEXT, ID_KELAS from artikel natural join artikel_kategori_verified"
