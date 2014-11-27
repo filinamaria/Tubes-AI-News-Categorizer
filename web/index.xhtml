@@ -1,7 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Tweet Analytics</title>
         
@@ -64,16 +66,22 @@
                 </div>
                 <div class="slide active" data-anchor="main">
                     <div id="query">
-                        <form action="#main/result" method="post">
-                            <input type="text" id="tweetkeyword" name="tweetkeyword" placeholder="Tweet Keyword" />
-                            <input type="text" id="keyword_1" name="keyword_1" placeholder="Traffic Keyword" />
-                            <input type="text" id="keyword_2" name="keyword_2" placeholder="Closed Road Keyword" />
-                            <input type="text" id="keyword_3" name="keyword_3" placeholder="Traffic Accident Keyword" />
+                        <h:form>
+                            <h:inputTextarea id="to_classify" 
+                                             value="#{analyzerBean.text}"
+                                             styleClass="input"/>
+                            <br/>
                             
-                            <input type="submit" id="analyzebutton" value="Analyze"/>
-                        </form>  
-                    </div>
-                                      
+                            <h:commandButton id="analyzebutton"
+                                             styleClass="button"
+                                             value="Classify"
+                                             onclick="window.location.hash = 'main/result'">
+                                <f:ajax execute="@form" 
+                                        render="result" 
+                                        listener="#{analyzerBean.analyzeText()}"></f:ajax>
+                            </h:commandButton>
+                        </h:form>  
+                    </div>            
                 </div>
                 <div class="slide" data-anchor="result">
                     <h1 data-menuanchor="main">
@@ -81,7 +89,7 @@
                     </h1>
                     <div class="custom_scrollbar" id="wrapper">
                         <h1>
-                           
+                            <h:outputLabel id="result">#{analyzerBean.result}</h:outputLabel>
                         </h1>
                     </div>
                 </div>

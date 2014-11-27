@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Tweet Analytics</title>
+        
+        <link href="css/screen.css" rel="stylesheet" type="text/css" />
+        <link href="css/jquery.fullPage.css" rel="stylesheet" type="text/css"/>
+        <script src='http://code.jquery.com/jquery-1.7.1.min.js'></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="jquery/jquery.fullPage.js"></script>
+        
+        <script type="text/javascript">
+		$(document).ready(function() {
+			$('#fullpage').fullpage({
+                                slidesColor: ['#44c8f5', '#4BBFC3'],
+				anchors: ['main', 'about'],
+                                scrollingSpeed: 800,
+                                afterLoad: function(anchorLink){
+                                    if(anchorLink == 'about'){
+                                        $('#section2').find('.intro').delay(400).animate({
+                                                left: '0%'
+                                        }, 1500, 'easeOutExpo');
+                                        $('#section2').find('.intro2').delay(500).animate({
+                                                left: '0%'
+                                        }, 1500, 'easeOutExpo');
+                                        $('#section2').find('.intro3').delay(600).animate({
+                                                left: '0%'
+                                        }, 1500, 'easeOutExpo');
+                                        $('#section2').find('.intro4').delay(700).animate({
+                                                left: '0%'
+                                        }, 1500, 'easeOutExpo');
+                                        $('#section2').find('.intro5').delay(800).animate({
+                                                left: '0%'
+                                        }, 1500, 'easeOutExpo');
+                                        $('#section2').find('.intro6').delay(900).animate({
+                                                left: '0%'
+                                        }, 1500, 'easeOutExpo');
+                                    }
+				}
+			});
+		});
+	</script>
+        
+        <script> 
+            $(document).ready(function(){
+                $("#slidebutton").click(function(){
+                  $("#config").slideToggle("fast");
+                });
+            });
+        </script>
+    </h:head>
+    <h:body>
+        
+        <div id="fullpage">
+            
+            <div class="section" id="section1">
+                <div id="header1"></div>
+                <div id="citybg"></div>
+                <div id="title">
+                    <h1>News Categorizer</h1>
+                </div>
+                <div class="slide active" data-anchor="main">
+                    <div id="query">
+                        <form action="#main/result" method="post">
+                            <input type="text" id="tweetkeyword" name="tweetkeyword" placeholder="Tweet Keyword" />
+                            <input type="text" id="keyword_1" name="keyword_1" placeholder="Traffic Keyword" />
+                            <input type="text" id="keyword_2" name="keyword_2" placeholder="Closed Road Keyword" />
+                            <input type="text" id="keyword_3" name="keyword_3" placeholder="Traffic Accident Keyword" />
+                            
+                            <input type="submit" id="analyzebutton" value="Analyze"/>
+                        </form>  
+                    </div>
+                                      
+                </div>
+                <div class="slide" data-anchor="result">
+                    <h1 data-menuanchor="main">
+                        <a href="#main"><div id="back"></div></a>
+                    </h1>
+                    <div class="custom_scrollbar" id="wrapper">
+                        <h1>
+                           
+                        </h1>
+                    </div>
+                </div>
+                <div id="footer1">
+                    <h1 data-menuanchor="about">
+                        <a href="#about">About</a>
+                    </h1>
+                </div>
+
+            </div>
+                        
+            <div class="section" id="section2">
+                <div id="header2"></div>
+                <div id="citybg"></div>
+                <div id="title">
+                    <div class="intro">
+                        <h1>About</h1>
+                    </div>
+                    <div class="intro2">
+                        <h2>Mario Tressa Juzar - 13512016</h2>
+                    </div>
+                    <div class="intro3">
+                        <h2>Cilvia Sianora Putri - 13512027</h2>
+                    </div>
+                    <div class="intro4">
+                        <h2>Mario Filino - 13512055</h2>
+                    </div>
+                    <div class="intro5">
+                        <h2>Calvin Sadewa - 13512066</h2>
+                    </div>
+                    <div class="intro6">
+                        <h2>Stanley Santoso - 13512086</h2>
+                    </div>
+                </div>
+                <div id="footer2">
+                    <h1>
+                        2014 Tweet Analytics
+                    </h1>
+                </div>
+            </div>
+                        
+    </div>
+        
+    </h:body>
+</html>
