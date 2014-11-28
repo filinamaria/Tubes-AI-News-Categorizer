@@ -19,6 +19,7 @@ import javax.mail.internet.NewsAddress;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayesMultinomial;
+import weka.classifiers.meta.FilteredClassifier;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instances;
@@ -98,7 +99,25 @@ public class NewsClassifier {
     }
     
 	public Classifier makeClassifier(Instances data) throws Exception{
-		Classifier cls = (Classifier) new NaiveBayesMultinomial();
+		FilteredClassifier cls = new FilteredClassifier();
+                MultiFilter filter = new MultiFilter();
+                Filter [] filters = new Filter[2];
+                
+                {
+                    NominalToString nominalToString = new NominalToString();
+                    nominalToString.setAttributeIndexes("first");
+                    filters[0] = nominalToString;
+                }
+                {
+                    StringToWordVector stringToWordVector = new StringToWordVector();
+                    stringToWordVector.setAttributeIndices("first-last");
+                    stringToWordVector.setLowerCaseTokens(true);
+                    stringToWordVector.setWordsToKeep(1000);
+                    filters[1] = stringToWordVector;
+                }
+                filter.setFilters(filters);
+                cls.setFilter(filter);
+                cls.setClassifier(new NaiveBayesMultinomial());
 		cls.buildClassifier(data);
 		return cls;
 	}
@@ -129,11 +148,13 @@ public class NewsClassifier {
 	}
 	
 	public String classifyText(String text){
+                
                 String namaKelas = "LABEL";
 		Instances trainingSet;
                 try {
                     trainingSet = getData();
                 } catch (Exception ex) {
+                    out.println(ex.getMessage());
                     return ex.getMessage();
                 }
                 if (trainingSet == null) return "training set tidak bisa di load";
@@ -141,38 +162,37 @@ public class NewsClassifier {
                 ArrayList<Attribute> attributes = new ArrayList<Attribute>();
                 Instances afterFilter;
                 try {
-                    afterFilter = (doFilter(trainingSet));
+                    afterFilter = trainingSet;
                 } catch (Exception ex) {
+                    out.println(ex.getMessage());
                     return ex.getMessage();
                 }
                 
-                Enumeration<Attribute> allAttribute = afterFilter.enumerateAttributes(); 
-                while (allAttribute.hasMoreElements()) {
-                    attributes.add(allAttribute.nextElement());
-                }
-                
+                //Enumeration<Attribute> allAttribute = afterFilter.enumerateAttributes(); 
+               // while (allAttribute.hasMoreElements()) {
+                  //  attributes.add(allAttribute.nextElement());
+                //}t
+                Attribute fullText = new Attribute("FULL_TEXT", (ArrayList<String>)null);
+                Attribute label = afterFilter.attribute(namaKelas);
+                attributes.add(fullText);
+                attributes.add(label);
                 Instances unlabeled= new Instances("unlabeled", attributes, 0);
-                double [] valuesRel = new double[unlabeled.numAttributes()];
+                double [] valuesRel = new double[2];
+                valuesRel[0] = unlabeled.attribute(0).addStringValue(text);
+                valuesRel[1] = 0;
                 
-                for (int i = 0; i < unlabeled.numAttributes(); i++) {
-                    if (attributes.get(i).name().equals(namaKelas)) {
-                        valuesRel[i] = 0;
-                    }
-                    else {
-                        if (text.contains(attributes.get(i).name())) {
-                            valuesRel[i] = 1;
-                        }
-                        else valuesRel[i] = 0;
-                    }
-                }
+                
                 
                 unlabeled.add(new DenseInstance(1.0, valuesRel));
-                Instances labeled;
+                Instances labeled = null;
+                
+                 
                 try {
                     labeled = classify(afterFilter, unlabeled, namaKelas);
                 } catch (Exception ex) {
-                    return ex.getMessage();
+                    Logger.getLogger(NewsClassifier.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
                 return labeled.classAttribute().value((int) labeled.instance(0).classValue());
 		//double clsLabel = cls.classifyInstance(unlabeled.instance(i));
 		//labeled.instance(i).setClassValue(clsLabel);
@@ -180,4 +200,15 @@ public class NewsClassifier {
 		
 		//return labeled;
 	}
+        
+        public static void main(String args []){
+            NewsClassifier nc = new NewsClassifier();
+        try {
+            Instances data = nc.getData();
+            data.setClass(data.attribute("LABEL"));
+            nc.evaluateClassifier(nc.makeClassifier(data), data);
+        } catch (Exception ex) {
+            Logger.getLogger(NewsClassifier.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
 }

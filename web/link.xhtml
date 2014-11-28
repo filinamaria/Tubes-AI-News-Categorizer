@@ -10,10 +10,9 @@
         <link href="css/screen.css" rel="stylesheet" type="text/css" />
         <link href="css/jquery.fullPage.css" rel="stylesheet" type="text/css"/>
         <script src='http://code.jquery.com/jquery-1.7.1.min.js'></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
         <script type="text/javascript" src="jquery/jquery.fullPage.js"></script>
-        
         
         <script type="text/javascript">
 		$(document).ready(function() {
@@ -52,18 +51,8 @@
                 $("#slidebutton").click(function(){
                   $("#config").slideToggle("fast");
                 });
-                $("#form:no_button").click(function (){
-                    alert("masuk");
-                    //$("#wrapper").css("display", "none");
-                });
             });
-            
-            function noButtonClicked(){
-                
-            }
         </script>
-        
-        
     </h:head>
     <h:body>
         
@@ -78,8 +67,8 @@
                 <div class="slide active" data-anchor="main">
                     <div id="query">
                         <div id="menu">
-                            <a href=""><div class="menu_button selected" id="menu_1">Text</div></a>
-                            <a href="/Tubes-AI-News-Categorizer/faces/link.xhtml"><div class="menu_button" id="menu_2">Link</div></a>
+                            <a href="/Tubes-AI-News-Categorizer/"><div class="menu_button" id="menu_1">Text</div></a>
+                            <a href=""><div class="menu_button selected" id="menu_2">Link</div></a>
                             <a href="/Tubes-AI-News-Categorizer/faces/file.xhtml"><div class="menu_button" id="menu_3">File</div></a>
                         </div>
                         <h:form>
@@ -103,24 +92,10 @@
                     <h1 data-menuanchor="main">
                         <a href="#main"><div id="back"></div></a>
                     </h1>
-                    <div id="wrapper">
-                        <br/>
-                        <h2>
-                            News category:
-                        </h2>
-                        <br/>
+                    <div class="custom_scrollbar" id="wrapper">
                         <h1>
                             <h:outputLabel id="result">#{analyzerBean.result}</h:outputLabel>
                         </h1>
-                        <br/>
-                        <h2>
-                            Is it correct?
-                        </h2>
-                        <h:form id="form">
-                            <h:commandButton class="feedback_button" id="yes_button" value="Yes"></h:commandButton>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <h:commandButton class="feedback_button" id="no_button" value="No" onclick="noButtonClicked(); return false;"></h:commandButton>
-                        </h:form>
                     </div>
                 </div>
                 <div id="footer1">
