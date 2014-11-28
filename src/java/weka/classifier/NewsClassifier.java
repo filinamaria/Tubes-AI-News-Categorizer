@@ -7,6 +7,8 @@
 package weka.classifier;
 
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import weka.classifiers.Evaluation;
 import weka.classifiers.Classifier;
 import weka.classifiers.bayes.NaiveBayesMultinomial;
@@ -67,6 +69,15 @@ public class NewsClassifier {
 		return cls;
 	}
 	
+	public String doClassify(String text) {
+		try {
+			Instances trainingSet = getData();
+			Instances toClassify = 
+		} catch (Exception ex) {
+			Logger.getLogger(NewsClassifier.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
 	public void evaluateClassifier(Classifier cls, Instances data) throws Exception{
 		Evaluation eval = new Evaluation(data);
 		eval.crossValidateModel(cls, data, 10, new Random(1));     
@@ -90,4 +101,16 @@ public class NewsClassifier {
 		
 		return labeled;
 	}
+	
+	public String classifyText(Instances trainingSet, String text, String namaKelas) throws Exception{
+		trainingSet.setClass(trainingSet.attribute(namaKelas));
+		Classifier cls = makeClassifier(trainingSet);
+		
+		double clsLabel = cls.classifyInstance(unlabeled.instance(i));
+		labeled.instance(i).setClassValue(clsLabel);
+		}
+		
+		return labeled;
+	}
+	
 }
