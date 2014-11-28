@@ -3,7 +3,7 @@ Finalisasi kerjaan hari ini (27 November 2014):
 
 1. bikin kelas java, nama terserah
 2. bikin method buat connect ke database mysql
-3. query db "select JUDUL, FULL_TEXT, ID_KELAS from artikel natural join artikel_kategori_verified"
+3. query db "select FULL_TEXT, LABEL from artikel natural join artikel_kategori_verified natural join kategori"
 4. Filter" yang digunakan (urutan penting):
     1. numericToNominal untuk atribut ID_KELAS (atribut no. 3/ last)
     2. nominalToString untuk artibut JUDUL, FULL_TEXT (atribut no.1,2)

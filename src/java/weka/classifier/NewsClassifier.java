@@ -38,26 +38,22 @@ public class NewsClassifier {
         query.setDatabaseURL(DB_URL);
         query.setUsername(Username);
         query.setPassword(Password);
-        query.setQuery("select JUDUL, FULL_TEXT, ID_KELAS from artikel natural join artikel_kategori_verified");
+        query.setQuery("select FULL_TEXT, LABEL from artikel natural join artikel_kategori_verified natural join kategori");
         Instances data = query.retrieveInstances();
         
         return data;
     }
     
     private Instances doFilter(Instances data) throws Exception{
-        NumericToNominal numericToNominal = new NumericToNominal();
-        numericToNominal.setAttributeIndices("last");
-        
         NominalToString nominalToString = new NominalToString();
-        nominalToString.setAttributeIndexes("1,2");
+        nominalToString.setAttributeIndexes("first");
         
         StringToWordVector stringToWordVector = new StringToWordVector();
         stringToWordVector.setAttributeIndices("first-last");
         stringToWordVector.setLowerCaseTokens(true);
         stringToWordVector.setWordsToKeep(4000);
         
-        Instances newData = Filter.useFilter(data, numericToNominal);
-        newData = Filter.useFilter(newData, nominalToString);
+        Instances newData = Filter.useFilter(data, nominalToString);
         newData = Filter.useFilter(newData, stringToWordVector);
         
         return newData;
