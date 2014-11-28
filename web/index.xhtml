@@ -77,7 +77,7 @@
                                              value="Classify"
                                              onclick="window.location.hash = 'main/result'">
                                 <f:ajax execute="@form"
-                                        render="result" 
+                                        render=":result" 
                                         listener="#{analyzerBean.analyzeText()}"></f:ajax>
                             </h:commandButton>
                         </h:form>  
