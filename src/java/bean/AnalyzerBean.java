@@ -7,6 +7,7 @@ package bean;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import weka.classifier.NewsClassifier;
 
 /**
  *
@@ -25,8 +26,8 @@ public class AnalyzerBean {
     }
 
     public void analyzeText() {
-        //TODO add some weka code here
-        result = "berhasil";
+        NewsClassifier nc = new NewsClassifier();
+        result = nc.classifyText(text);
     }
     /**
      * @return the text

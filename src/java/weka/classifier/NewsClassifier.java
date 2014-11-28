@@ -10,6 +10,8 @@ import static java.lang.System.out;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +19,8 @@ import javax.mail.internet.NewsAddress;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayesMultinomial;
+import weka.core.Attribute;
+import weka.core.DenseInstance;
 import weka.core.Instances;
 import weka.experiment.InstanceQuery;
 import weka.filters.*;
@@ -35,20 +39,6 @@ public class NewsClassifier {
 
     public NewsClassifier(){
         
-    }
-    
-    public static void main(String args []){
-        try {
-            NewsClassifier lalala = new NewsClassifier();
-            Instances data = lalala.getData();
-            if(data != null){
-                out.println("bisa");
-            }else{
-                out.println("tidak bisa");
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(NewsClassifier.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     private Connection getConnection() throws ClassNotFoundException, SQLException, IllegalAccessException{
@@ -89,18 +79,22 @@ public class NewsClassifier {
     }
     
     private Instances doFilter(Instances data) throws Exception{
+        
         NominalToString nominalToString = new NominalToString();
         nominalToString.setAttributeIndexes("first");
+        
+        nominalToString.setInputFormat(data);
+        Instances newData = Filter.useFilter(data, nominalToString);
         
         StringToWordVector stringToWordVector = new StringToWordVector();
         stringToWordVector.setAttributeIndices("first-last");
         stringToWordVector.setLowerCaseTokens(true);
         stringToWordVector.setWordsToKeep(4000);
         
-        Instances newData = Filter.useFilter(data, nominalToString);
-        newData = Filter.useFilter(newData, stringToWordVector);
+        stringToWordVector.setInputFormat(newData);
+        Instances newData2 = Filter.useFilter(newData, stringToWordVector);
         
-        return newData;
+        return newData2;
     }
     
 	public Classifier makeClassifier(Instances data) throws Exception{
@@ -119,6 +113,7 @@ public class NewsClassifier {
 	
 	public Instances classify(Instances trainingSet, Instances unlabeled, String namaKelas) throws Exception{
 		trainingSet.setClass(trainingSet.attribute(namaKelas));
+                unlabeled.setClass(trainingSet.attribute(namaKelas));
 		Classifier cls = makeClassifier(trainingSet);
 		
 		//create copy
@@ -133,17 +128,56 @@ public class NewsClassifier {
 		return labeled;
 	}
 	
-	public String classifyText(Instances trainingSet, String text, String namaKelas) throws Exception{
-		trainingSet.setClass(trainingSet.attribute(namaKelas));
-		Classifier cls = makeClassifier(trainingSet);
-		
+	public String classifyText(String text){
+                String namaKelas = "LABEL";
+		Instances trainingSet;
+                try {
+                    trainingSet = getData();
+                } catch (Exception ex) {
+                    return ex.getMessage();
+                }
+                if (trainingSet == null) return "training set tidak bisa di load";
+                
+                ArrayList<Attribute> attributes = new ArrayList<Attribute>();
+                Instances afterFilter;
+                try {
+                    afterFilter = (doFilter(trainingSet));
+                } catch (Exception ex) {
+                    return ex.getMessage();
+                }
+                
+                Enumeration<Attribute> allAttribute = afterFilter.enumerateAttributes(); 
+                while (allAttribute.hasMoreElements()) {
+                    attributes.add(allAttribute.nextElement());
+                }
+                
+                Instances unlabeled= new Instances("unlabeled", attributes, 0);
+                double [] valuesRel = new double[unlabeled.numAttributes()];
+                
+                for (int i = 0; i < unlabeled.numAttributes(); i++) {
+                    if (attributes.get(i).name().equals(namaKelas)) {
+                        valuesRel[i] = 0;
+                    }
+                    else {
+                        if (text.contains(attributes.get(i).name())) {
+                            valuesRel[i] = 1;
+                        }
+                        else valuesRel[i] = 0;
+                    }
+                }
+                
+                unlabeled.add(new DenseInstance(1.0, valuesRel));
+                Instances labeled;
+                try {
+                    labeled = classify(afterFilter, unlabeled, namaKelas);
+                } catch (Exception ex) {
+                    return ex.getMessage();
+                }
+                return labeled.classAttribute().value((int) labeled.instance(0).classValue());
 		//double clsLabel = cls.classifyInstance(unlabeled.instance(i));
 		//labeled.instance(i).setClassValue(clsLabel);
 		//}
 		
 		//return labeled;
-                return null;
 	}
-        
-	
 }
