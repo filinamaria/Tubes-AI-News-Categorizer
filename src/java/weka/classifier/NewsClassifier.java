@@ -25,7 +25,7 @@ public class NewsClassifier {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/news_aggregator";
     private static final String Username = "root";
     private static final String Password = "";
-    
+
     public NewsClassifier(){
         
     }
