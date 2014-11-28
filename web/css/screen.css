@@ -320,6 +320,7 @@ br {
 	margin-left: -235px;
 	padding-left: 10px;
 	padding-right: 10px;
+        cursor: pointer;
 }
 
 #analyzebutton:hover{
@@ -477,11 +478,25 @@ textarea{
     border: solid #19bfc5;
     background-color: #19bfc5;
     color: #0a4d70;
+    cursor: pointer;
 }
 
 .feedback_button:hover{
     border: solid #1e7fa8;
     background-color: #1e7fa8;
     color: #19bfc5;
+}
+
+.category_menu{
+    width: 180px;
+    height: 30px;
+    border-radius: 4px;
+    border: solid #fff;
+    background-color: #fff;
+    color: #0a4d70;
+}
+
+#form2{
+    display: none;
 }
 

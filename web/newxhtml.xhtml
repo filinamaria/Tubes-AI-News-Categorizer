@@ -77,7 +77,7 @@ and open the template in the editor.
         
         <script> 
             $(document).ready(function(){
-                $("#no_button").click(function (){
+                $(".feedback_button").click(function (){
                     alert("masuk");
                     //$("#wrapper").css("display", "none");
                 });
@@ -95,9 +95,9 @@ and open the template in the editor.
             asdasdsadsadjjaskjdhaslkdjasld
         </div>
 	<h:form id="form">
-            <h:commandLink styleClass="feedback_button" id="yes_button" value="Yes"></h:commandLink>
+            <h:commandLink type="submit" styleClass="feedback_button" id="yes_button" value="Yes"></h:commandLink>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <h:commandLink styleClass="feedback_button" id="no_button" value="No" ></h:commandLink>
+            <h:commandLink type="submit" styleClass="feedback_button" id="no_button" value="No" ></h:commandLink>
         </h:form>
         <input type="submit" value="click" id="no_button"></input>
 

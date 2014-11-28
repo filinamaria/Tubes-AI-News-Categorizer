@@ -52,14 +52,16 @@
                 $("#slidebutton").click(function(){
                   $("#config").slideToggle("fast");
                 });
-                $("#form:no_button").click(function (){
-                    alert("masuk");
-                    //$("#wrapper").css("display", "none");
-                });
             });
             
             function noButtonClicked(){
-                
+                $("#form").css("display", "none");
+                $("#form2").css("display", "inline");
+            }
+            
+            function classifyButtonClicked(){
+                $("#form").css("display", "inline");
+                $("#form2").css("display", "none");
             }
         </script>
         
@@ -91,7 +93,7 @@
                             <h:commandButton id="analyzebutton"
                                              styleClass="button"
                                              value="Classify"
-                                             onclick="window.location.hash = 'main/result'">
+                                             onclick="classifyButtonClicked(); window.location.hash = 'main/result'">
                                 <f:ajax execute="@form"
                                         render=":result" 
                                         listener="#{analyzerBean.analyzeText()}"></f:ajax>
@@ -113,13 +115,32 @@
                             <h:outputLabel id="result">#{analyzerBean.result}</h:outputLabel>
                         </h1>
                         <br/>
-                        <h2>
-                            Is it correct?
-                        </h2>
                         <h:form id="form">
+                            <h2>
+                                Is it correct?
+                            </h2>
                             <h:commandButton class="feedback_button" id="yes_button" value="Yes"></h:commandButton>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <h:commandButton class="feedback_button" id="no_button" value="No" onclick="noButtonClicked(); return false;"></h:commandButton>
+                        </h:form>
+                        <h:form id="form2">
+                            <h2>
+                                What is the correct category?
+                            </h2>
+                            <h:selectOneMenu class="category_menu">
+                                <f:selectItem itemValue="Pendidikan" itemLabel="Pendidikan" />
+                                <f:selectItem itemValue="Politik" itemLabel="Politik" />
+                                <f:selectItem itemValue="Hukum dan Kriminal" itemLabel="Hukum dan Kriminal" />
+                                <f:selectItem itemValue="Sosial Budaya" itemLabel="Sosial Budaya" />
+                                <f:selectItem itemValue="Olahraga" itemLabel="Olahraga" />	
+                                <f:selectItem itemValue="Teknologi dan Sains" itemLabel="Teknologi dan Sains" />
+                                <f:selectItem itemValue="Hiburan" itemLabel="Hiburan" />	
+                                <f:selectItem itemValue="Bisnis dan Ekonomi" itemLabel="Bisnis dan Ekonomi" />
+                                <f:selectItem itemValue="Kesehatan" itemLabel="Kesehatan" />	
+                                <f:selectItem itemValue="Bencana dan Kecelakaan" itemLabel="Bencana dan Kecelakaan" />	
+                            </h:selectOneMenu>	
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <h:commandButton class="feedback_button" value="Submit" action="result" />
                         </h:form>
                     </div>
                 </div>
