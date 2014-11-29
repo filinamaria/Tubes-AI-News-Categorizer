@@ -25,9 +25,9 @@ public class AnalyzerBean {
     public AnalyzerBean() {
     }
 
-    public void analyzeText() {
+    public void analyzeText() throws Exception {
         NewsClassifier nc = new NewsClassifier();
-        result = nc.classifyText(text);
+        result = nc.classifyText(text, "LABEL");
     }
     /**
      * @return the text
