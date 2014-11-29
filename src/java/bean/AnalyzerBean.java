@@ -25,7 +25,13 @@ public class AnalyzerBean {
     public AnalyzerBean() {
     }
 
-    public void analyzeText() throws Exception {
+	public void analyzeLink() throws Exception {
+        NewsClassifier nc = new NewsClassifier();
+		text = nc.getNewsContentFromURL(text);
+        result = nc.classifyText(text, "LABEL");
+    }
+	
+	public void analyzeText() throws Exception {
         NewsClassifier nc = new NewsClassifier();
         result = nc.classifyText(text, "LABEL");
     }
