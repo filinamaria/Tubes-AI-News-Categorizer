@@ -51,8 +51,7 @@ public class NewsClassifier {
             String user = DB_Username;
             String password = DB_Password;
             connection =  DriverManager.getConnection(url, user, password);
-       }catch(ClassNotFoundException | InstantiationException e){
-	//	}catch(Exception e){
+        }catch(ClassNotFoundException | InstantiationException e){
             e.printStackTrace();
         }
         
