@@ -11,11 +11,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.mail.internet.NewsAddress;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayesMultinomial;
@@ -26,7 +22,6 @@ import weka.core.Instances;
 import weka.experiment.InstanceQuery;
 import weka.filters.*;
 import weka.filters.unsupervised.attribute.NominalToString;
-import weka.filters.unsupervised.attribute.NumericToNominal;
 import weka.filters.unsupervised.attribute.StringToWordVector;
 
 /**
