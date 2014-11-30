@@ -92,6 +92,7 @@ public class NewsClassifier {
         stringToWordVector.setAttributeIndices("first-last");
         stringToWordVector.setLowerCaseTokens(true);
         stringToWordVector.setWordsToKeep(1000);
+        stringToWordVector.setOutputWordCounts(true);
         
         return stringToWordVector;
     }
