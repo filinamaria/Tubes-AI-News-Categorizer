@@ -72,8 +72,8 @@
                             <h:link outcome="file.xhtml"><div class="menu_button selected" id="menu_3">File</div></h:link>
                         </div>
                         <h:form>
-                            <h:inputTextarea id="to_classify" 
-                                             value="#{analyzerBean.text}"
+                            <h:inputFile id="to_classify" 
+                                             value="#{analyzerBean.inputfile}"
                                              styleClass="input"/>
                             <br/>
                             
@@ -83,7 +83,7 @@
                                              onclick="">
                                 <f:ajax execute="@form"
                                         render=":result" 
-                                        listener="#{analyzerBean.analyzeText()}"></f:ajax>
+                                        listener="#{analyzerBean.analyzeFile()}"></f:ajax>
                             </h:commandButton>
                         </h:form>  
                     </div>            

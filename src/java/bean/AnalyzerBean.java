@@ -48,6 +48,11 @@ public class AnalyzerBean {
         setResult(nc.classifyText(text, "LABEL"));
     }
 	
+	public void analyzeFile() throws Exception{
+        FileClassifier fc = new FileClassifier();
+        fc.classifyFile(inputfile,"LABEL");
+    }
+    
     public void analyzeText() throws Exception {
         NewsClassifier nc = new NewsClassifier();
         setResult(nc.classifyText(text, "LABEL"));
