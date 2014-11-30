@@ -62,6 +62,7 @@
             function classifyButtonClicked(){
                 $("#form").css("display", "inline");
                 $("#form2").css("display", "none");
+                document.getElementById("result").innerHTML = "Loading...";
             }
         </script>
         
@@ -84,7 +85,7 @@
                             <h:link outcome="link.xhtml"><div class="menu_button" id="menu_2">Link</div></h:link>
                             <h:link outcome="file.xhtml"><div class="menu_button" id="menu_3">File</div></h:link>
                         </div>
-                        <h:form>
+                        <h:form id="userInput">
                             <h:inputTextarea id="to_classify" 
                                              value="#{analyzerBean.text}"
                                              styleClass="input"/>

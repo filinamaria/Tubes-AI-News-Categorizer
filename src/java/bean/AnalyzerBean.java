@@ -19,21 +19,23 @@ public class AnalyzerBean {
 
     private String text;
     private String result;
+    
     /**
      * Creates a new instance of AnalyzerBean
      */
     public AnalyzerBean() {
+        result = "Loading...";
     }
 
-	public void analyzeLink() throws Exception {
+    public void analyzeLink() throws Exception {
         NewsClassifier nc = new NewsClassifier();
-		text = nc.getNewsContentFromURL(text);
-        result = nc.classifyText(text, "LABEL");
+        text = nc.getNewsContentFromURL(text);
+        setResult(nc.classifyText(text, "LABEL"));
     }
 	
-	public void analyzeText() throws Exception {
+    public void analyzeText() throws Exception {
         NewsClassifier nc = new NewsClassifier();
-        result = nc.classifyText(text, "LABEL");
+        setResult(nc.classifyText(text, "LABEL"));
     }
     /**
      * @return the text
@@ -54,6 +56,13 @@ public class AnalyzerBean {
      */
     public String getResult() {
         return result;
+    }
+
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) {
+        this.result = result;
     }
     
 }

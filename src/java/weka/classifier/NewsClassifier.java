@@ -169,60 +169,59 @@ public class NewsClassifier {
         Instances labeledData = null;
 
         labeledData = classify(trainingSet, unlabeledData, className);
+        
         textLabel = labeledData.classAttribute().value((int) labeledData.instance(0).classValue());
 
         return textLabel;
 
     }
 	
-	public String getHtmlCode(String link) throws Exception{
-		URL url = new URL(link);
-		StringBuffer response;
-		BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-		
-		String inputLine;
-		response = new StringBuffer();
-		while ((inputLine = in.readLine()) != null){
-			response.append(inputLine);
-		}
-		
-		return response.toString();
-	}
-	
-	public String getNewsContentFromURL(String link) throws Exception{
-		String content = "";
-		String htmlCode = getHtmlCode(link);
-		String contentRegex = "";
-		
-		if(link.contains("liputan6.com")){
-			contentRegex = "(<div\\sclass=\"entry-content\">)(.+?)(</div>)";
-		} else if(link.contains("detik.com")){
-			contentRegex = "(<div\\sclass=\"text_detail\">)(.+?)(</div>)";
-		} else if(link.contains("tempo.co")){
-			contentRegex = "(<span\\sstyle=\"color:\\s#666666;\">)(.+?)(</div>)";
-		} else if(link.contains("okezone.com")){
-			contentRegex = "(<strong>)(.+?)(</div>)";
-		} else if(link.contains("merdeka.com")){
-			contentRegex = "(<p>)(.+?)(</p>)";
-		} else if(link.contains("bharian.com")){
-			contentRegex = "(<div\\sclass=\"node-content\\scontent\">)(.+?)(</article>)";
-		}
-		
-		// get the news content 
-		Pattern p = Pattern.compile(contentRegex);
-		Matcher m = p.matcher(htmlCode);
-		if(m.find()) {
-		   content = m.group();
-		}
-		
-		// remove all html tag
-		String htmlTagRegex = "<(.+?)>";
-		content = content.replaceAll(htmlTagRegex, "");
-		
-		// remove all html ascii code
-		String htmlAsciiRegex = "&([a-zA-Z0-9]+;)";
-		content = content.replaceAll(htmlAsciiRegex, "");
-		
-		return content;
-	}
+    public String getHtmlCode(String link) throws Exception{
+        URL url = new URL(link);
+        StringBuffer response;
+        BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+
+        String inputLine;
+        response = new StringBuffer();
+        while ((inputLine = in.readLine()) != null){
+                response.append(inputLine);
+        }
+
+        return response.toString();
+    }
+
+    public String getNewsContentFromURL(String link) throws Exception{
+        String content = "";
+        String htmlCode = getHtmlCode(link);
+        String contentRegex = "";
+
+        if(link.contains("liputan6.com")){
+                contentRegex = "(<div\\sclass=\"entry-content\">)(.+?)(</div>)";
+        } else if(link.contains("detik.com")){
+                contentRegex = "(<div\\sclass=\"text_detail\">)(.+?)(</div>)";
+        } else if(link.contains("tempo.co")){
+                contentRegex = "(<span\\sstyle=\"color:\\s#666666;\">)(.+?)(</div>)";
+        } else if(link.contains("okezone.com")){
+                contentRegex = "(<strong>)(.+?)(</div>)";
+        } else if(link.contains("bharian.com")){
+                contentRegex = "(<div\\sclass=\"node-content\\scontent\">)(.+?)(</article>)";
+        }
+
+        // get the news content 
+        Pattern p = Pattern.compile(contentRegex);
+        Matcher m = p.matcher(htmlCode);
+        if(m.find()) {
+           content = m.group();
+        }
+
+        // remove all html tag
+        String htmlTagRegex = "<(.+?)>";
+        content = content.replaceAll(htmlTagRegex, "");
+
+        // remove all html ascii code
+        String htmlAsciiRegex = "&([a-zA-Z0-9]+;)";
+        content = content.replaceAll(htmlAsciiRegex, "");
+
+        return content;
+    }
 }
