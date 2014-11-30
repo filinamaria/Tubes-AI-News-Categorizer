@@ -128,20 +128,29 @@
                             <h2>
                                 What is the correct category?
                             </h2>
-                            <h:selectOneMenu class="category_menu">
-                                <f:selectItem itemValue="Pendidikan" itemLabel="Pendidikan" />
-                                <f:selectItem itemValue="Politik" itemLabel="Politik" />
-                                <f:selectItem itemValue="Hukum dan Kriminal" itemLabel="Hukum dan Kriminal" />
-                                <f:selectItem itemValue="Sosial Budaya" itemLabel="Sosial Budaya" />
-                                <f:selectItem itemValue="Olahraga" itemLabel="Olahraga" />	
-                                <f:selectItem itemValue="Teknologi dan Sains" itemLabel="Teknologi dan Sains" />
-                                <f:selectItem itemValue="Hiburan" itemLabel="Hiburan" />	
-                                <f:selectItem itemValue="Bisnis dan Ekonomi" itemLabel="Bisnis dan Ekonomi" />
-                                <f:selectItem itemValue="Kesehatan" itemLabel="Kesehatan" />	
-                                <f:selectItem itemValue="Bencana dan Kecelakaan" itemLabel="Bencana dan Kecelakaan" />	
-                            </h:selectOneMenu>	
+                            <h:selectOneMenu id="label" class="category_menu" value="#{analyzerBean.label}">
+                                <f:selectItem itemValue="1" itemLabel="Pendidikan" />
+                                <f:selectItem itemValue="2" itemLabel="Kriminal" />
+                                <f:selectItem itemValue="3" itemLabel="Politik" />
+                                <f:selectItem itemValue="4" itemLabel="Hukum dan Kriminal" />
+                                <f:selectItem itemValue="5" itemLabel="Sosial Budaya" />
+                                <f:selectItem itemValue="6" itemLabel="Olahraga" />	
+                                <f:selectItem itemValue="7" itemLabel="Teknologi dan Sains" />
+                                <f:selectItem itemValue="8" itemLabel="Pertanian" />
+                                <f:selectItem itemValue="9" itemLabel="Hiburan" />	
+                                <f:selectItem itemValue="10" itemLabel="Bisnis dan Ekonomi" />
+                                <f:selectItem itemValue="11" itemLabel="Ekonomi" />
+                                <f:selectItem itemValue="12" itemLabel="Kesehatan" />
+                                <f:selectItem itemValue="13" itemLabel="Internasional" />
+                                <f:selectItem itemValue="14" itemLabel="Bencana dan Kecelakaan" />
+                                <f:selectItem itemValue="15" itemLabel="Investigasi dan Persidangan" />
+                            </h:selectOneMenu>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <h:commandButton class="feedback_button" value="Submit" action="result" />
+                            <h:commandButton class="feedback_button" value="Submit" onclick="window.location.hash = 'main'">
+                                <f:ajax execute="@all"  
+                                        listener="#{analyzerBean.setFeedback(analyzerBean.text)}" >
+                                </f:ajax>
+                            </h:commandButton>
                         </h:form>
                     </div>
                 </div>
