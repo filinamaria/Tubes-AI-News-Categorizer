@@ -51,8 +51,7 @@ public class NewsClassifier {
             String user = DB_Username;
             String password = DB_Password;
             connection =  DriverManager.getConnection(url, user, password);
-      //  }catch(ClassNotFoundException | InstantiationException e){
-		} catch(Exception e){
+        }catch(ClassNotFoundException | InstantiationException e){
 			e.printStackTrace();
         }
         
@@ -201,8 +200,6 @@ public class NewsClassifier {
 			contentRegex = "(<span\\sstyle=\"color:\\s#666666;\">)(.+?)(</div>)";
 		} else if(link.contains("okezone.com")){
 			contentRegex = "(<strong>)(.+?)(</div>)";
-		} else if(link.contains("merdeka.com")){
-			contentRegex = "(<p>)(.+?)(</p>)";
 		} else if(link.contains("bharian.com")){
 			contentRegex = "(<div\\sclass=\"node-content\\scontent\">)(.+?)(</article>)";
 		}
@@ -221,6 +218,9 @@ public class NewsClassifier {
 		// remove all html ascii code
 		String htmlAsciiRegex = "&([a-zA-Z0-9]+;)";
 		content = content.replaceAll(htmlAsciiRegex, "");
+		
+		// remove non-ascii characters
+		content = content.replaceAll("[^\\x00-\\x7F]", "");
 		
 		return content;
 	}
