@@ -13,6 +13,9 @@ import java.sql.Statement;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
+import javax.servlet.http.Part;
+import weka.classifier.FileClassifier;
 import weka.classifier.NewsClassifier;
 
 /**
@@ -20,12 +23,13 @@ import weka.classifier.NewsClassifier;
  * @author calvin-pc
  */
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class AnalyzerBean {
 
     private String text;
     private String result;
     private String label;
+    private Part inputfile;
 
     public String getLabel() {
         return label;
@@ -48,9 +52,9 @@ public class AnalyzerBean {
         setResult(nc.classifyText(text, "LABEL"));
     }
 	
-	public void analyzeFile() throws Exception{
+    public void analyzeFile() throws Exception{
         FileClassifier fc = new FileClassifier();
-        fc.classifyFile(inputfile,"LABEL");
+        fc.classifyFile(getInputfile(),"LABEL");
     }
     
     public void analyzeText() throws Exception {
@@ -114,6 +118,20 @@ public class AnalyzerBean {
         }catch(ClassNotFoundException | InstantiationException e){
             e.printStackTrace();
         }
+    }
+
+    /**
+     * @param inputfile the inputfile to set
+     */
+    public void setInputfile(Part inputfile) {
+        this.inputfile = inputfile;
+    }
+
+    /**
+     * @return the inputfile
+     */
+    public Part getInputfile() {
+        return inputfile;
     }
     
 }

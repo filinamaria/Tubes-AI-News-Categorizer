@@ -10,9 +10,10 @@
         <link href="css/screen.css" rel="stylesheet" type="text/css" />
         <link href="css/jquery.fullPage.css" rel="stylesheet" type="text/css"/>
         <script src='http://code.jquery.com/jquery-1.7.1.min.js'></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
         <script type="text/javascript" src="jquery/jquery.fullPage.js"></script>
+        
         
         <script type="text/javascript">
 		$(document).ready(function() {
@@ -61,8 +62,11 @@
             function classifyButtonClicked(){
                 $("#form").css("display", "inline");
                 $("#form2").css("display", "none");
+                document.getElementById("result").innerHTML = "Loading...";
             }
         </script>
+        
+        
     </h:head>
     <h:body>
         
@@ -81,7 +85,7 @@
                             <h:link outcome="link.xhtml"><div class="menu_button selected" id="menu_2">Link</div></h:link>
                             <h:link outcome="file.xhtml"><div class="menu_button" id="menu_3">File</div></h:link>
                         </div>
-                        <h:form>
+                        <h:form id="userInput">
                             <h:inputTextarea id="to_classify" 
                                              value="#{analyzerBean.text}"
                                              styleClass="input"/>
