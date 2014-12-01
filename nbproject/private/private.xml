@@ -4,9 +4,12 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Sakurai/Desktop/Tubes-AI-News-Categorizer/web/css/screen.css</file>
+            <file>file:/C:/Users/Sakurai/Desktop/Tubes-AI-News-Categorizer/web/link.xhtml</file>
             <file>file:/C:/Users/Sakurai/Desktop/Tubes-AI-News-Categorizer/web/index.xhtml</file>
             <file>file:/C:/Users/Sakurai/Desktop/Tubes-AI-News-Categorizer/src/java/bean/AnalyzerBean.java</file>
+            <file>file:/C:/Users/Sakurai/Desktop/Tubes-AI-News-Categorizer/web/file.xhtml</file>
             <file>file:/C:/Users/Sakurai/Desktop/Tubes-AI-News-Categorizer/src/java/weka/classifier/NewsClassifier.java</file>
+            <file>file:/C:/Users/Sakurai/Desktop/Tubes-AI-News-Categorizer/web/WEB-INF/web.xml</file>
         </group>
     </open-files>
 </project-private>

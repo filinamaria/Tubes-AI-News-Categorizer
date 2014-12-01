@@ -7,16 +7,20 @@
 package weka.classifier;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import static java.lang.System.out;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayesMultinomial;
@@ -24,21 +28,27 @@ import weka.classifiers.meta.FilteredClassifier;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instances;
+import weka.core.converters.ArffSaver;
+import weka.core.converters.CSVLoader;
+import weka.core.converters.CSVSaver;
+import weka.core.converters.Loader;
 import weka.experiment.InstanceQuery;
 import weka.filters.*;
+import weka.filters.Filter;
+import weka.filters.MultiFilter;
 import weka.filters.unsupervised.attribute.NominalToString;
 import weka.filters.unsupervised.attribute.StringToWordVector;
 
 /**
  *
- * @author Sakurai
+ * @author WekaWeka
  */
-public class NewsClassifier {
+public class FileClassifier {    
     private static final String DB_URL = "jdbc:mysql://localhost:3306/news_aggregator";
     private static final String DB_Username = "root";
     private static final String DB_Password = "";
-
-    public NewsClassifier(){
+    
+    public FileClassifier(){
         
     }
     
@@ -52,7 +62,7 @@ public class NewsClassifier {
             String password = DB_Password;
             connection =  DriverManager.getConnection(url, user, password);
         }catch(ClassNotFoundException | InstantiationException e){
-			e.printStackTrace();
+            e.printStackTrace();
         }
         
         return connection;
@@ -78,6 +88,18 @@ public class NewsClassifier {
         
         return data;
     }
+   
+    
+    public Instances CSV2Instances(Part inputfile) throws IOException{
+        // Baca file input
+        InputStream stream = inputfile.getInputStream();
+        Loader loader = new CSVLoader() ;
+        loader.setSource(stream);
+        // Konversi file input menjadi instance
+        Instances data = loader.getDataSet();
+        data.deleteAttributeAt(1);
+        return data;
+    }
     
     private NominalToString getNominalToStringFilter(){
         NominalToString nominalToString = new NominalToString();
@@ -91,7 +113,6 @@ public class NewsClassifier {
         stringToWordVector.setAttributeIndices("first-last");
         stringToWordVector.setLowerCaseTokens(true);
         stringToWordVector.setWordsToKeep(1000);
-        stringToWordVector.setOutputWordCounts(true);
         
         return stringToWordVector;
     }
@@ -133,97 +154,68 @@ public class NewsClassifier {
 
         //create copy
         Instances labeledData = unlabeledData;
-
         // classify each instances, each instance will be given label name classified by using the model
         for (int i = 0; i < unlabeledData.numInstances(); i++) {
             double instanceLabel = usedClassifier.classifyInstance(unlabeledData.instance(i));
             labeledData.instance(i).setClassValue(instanceLabel);
+            
         }
 
         return labeledData;
     }
-	
-    public String classifyText(String text, String className) throws Exception{
+    
+    public void classifyFile(Part inputfile, String className) throws Exception{
         String textLabel;
+        String filepath;
         Instances trainingSet = null;
         ArrayList<Attribute> attributes = new ArrayList<Attribute>();
                 
         trainingSet = getData();
         
-        if (trainingSet == null) return "Training set cannot be loaded";
-
         Attribute fullText = new Attribute("FULL_TEXT", (ArrayList<String>)null);
         Attribute label = trainingSet.attribute(className);
         attributes.add(fullText);
         attributes.add(label);
         
-        // Generate instance from input text with unknown class label
-        Instances unlabeledData = new Instances("unlabeled", attributes, 0);
-        double [] valuesRel = new double[2];
-        valuesRel[0] = unlabeledData.attribute(0).addStringValue(text);
-        valuesRel[1] = 0;
-        unlabeledData.add(new DenseInstance(1.0, valuesRel));
+        Instances unlabeled = CSV2Instances(inputfile);
+        unlabeled.insertAttributeAt(label, 1);
         
-        // Create new instance for storing labeled data
-        Instances labeledData = null;
-
-        labeledData = classify(trainingSet, unlabeledData, className);
+        Instances labeled = classify(trainingSet,unlabeled,className);
         
-        textLabel = labeledData.classAttribute().value((int) labeledData.instance(0).classValue());
-
-        return textLabel;
-
+        CSVSaver saver = new CSVSaver();
+        saver.setInstances(labeled);
+        
+        File F = new File("/data/output.csv");
+        if(F.exists()){
+            F.delete();
+        }
+        saver.setFile(F);
+        saver.writeBatch();
+        
+        downloadFile();
     }
-	
-	public String getHtmlCode(String link) throws Exception{
-		URL url = new URL(link);
-		StringBuffer response;
-		BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-		
-		String inputLine;
-		response = new StringBuffer();
-		while ((inputLine = in.readLine()) != null){
-			response.append(inputLine);
-		}
-		
-		return response.toString();
-	}
-	
-	public String getNewsContentFromURL(String link) throws Exception{
-		String content = "";
-		String htmlCode = getHtmlCode(link);
-		String contentRegex = "";
-		
-		if(link.contains("liputan6.com")){
-			contentRegex = "(<div\\sclass=\"entry-content\">)(.+?)(</div>)";
-		} else if(link.contains("detik.com")){
-			contentRegex = "(<div\\sclass=\"text_detail\">)(.+?)(</div>)";
-		} else if(link.contains("tempo.co")){
-			contentRegex = "(<strong>)(.+?)(</div>)";
-		} else if(link.contains("okezone.com")){
-			contentRegex = "(<strong>)(.+?)(</div>)";
-		} else if(link.contains("bharian.com")){
-			contentRegex = "(<div\\sclass=\"node-content\\scontent\">)(.+?)(</article>)";
-		}
-		
-		// get the news content 
-		Pattern p = Pattern.compile(contentRegex);
-		Matcher m = p.matcher(htmlCode);
-		if(m.find()) {
-		   content = m.group();
-		}
-		
-		// remove all html tag
-		String htmlTagRegex = "<(.+?)>";
-		content = content.replaceAll(htmlTagRegex, "");
-		
-		// remove all html ascii code
-		String htmlAsciiRegex = "&([a-zA-Z0-9]+;)";
-		content = content.replaceAll(htmlAsciiRegex, "");
-		
-		// remove non-ascii characters
-		content = content.replaceAll("[^\\x00-\\x7F]", "");
-		content = content.replaceAll("'","");
-		return content;
-	}
+    
+    public void downloadFile() throws IOException
+    {
+        File file = new File("data/output.csv");
+        InputStream fis = new FileInputStream(file);
+        byte[] buf = new byte[1024];
+        int offset = 0;
+        int numRead = 0;
+        while ((offset < buf.length) && ((numRead = fis.read(buf, offset, buf.length - offset)) >= 0)) 
+        {
+          offset += numRead;
+        }
+        fis.close();
+        HttpServletResponse response =
+           (HttpServletResponse) FacesContext.getCurrentInstance()
+               .getExternalContext().getResponse();
+
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment;filename=output.csv");
+        response.getOutputStream().write(buf);
+        response.getOutputStream().flush();
+        response.getOutputStream().close();
+        FacesContext.getCurrentInstance().responseComplete();
+    }
 }
