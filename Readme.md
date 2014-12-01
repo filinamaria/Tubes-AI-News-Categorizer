@@ -1,15 +1,15 @@
+Pre-requirement:
 
-Finalisasi kerjaan hari ini (27 November 2014):
+1. Server Glassfish 4.0 keatas
 
-1. bikin kelas java, nama terserah
-2. bikin method buat connect ke database mysql
-3. query db "select FULL_TEXT, LABEL from artikel natural join artikel_kategori_verified natural join kategori"
-4. Filter" yang digunakan (urutan penting):
-    1. numericToNominal untuk atribut ID_KELAS (atribut no. 3/ last)
-    2. nominalToString untuk artibut JUDUL, FULL_TEXT (atribut no.1,2)
-    3. Filter stringToWordVector dengan properti default untuk atribut JUDUL dan FULL_TEXT
-    4. Set atribut ID_KELAS sebagai label
-5. bikin stub buat demo besok yang isinya:
-    1. Classifier naiveBayesMultinomial dengan properti default
+Panduan penggunaan program:
 
- 
+1. Jalankan server Glassfish anda.
+
+2. Extract isi dari file NewsCategorizer.zip, deploy file NewsCategorizer.war melalui halaman admin server Glassfish anda.
+
+3. Navigasi ke menu 'Application' pada halaman admin server Glassfish, pilih NewsCategorizer, ubah context-root menjadi "/Tubes-AI".
+
+4. Buka browser anda dan masukkan URL Glassfish anda ditambah dengan "/Tubes-AI/". Contohnya "localhost:8080/Tubes-AI/".
+
+5. Pada halaman web, terdapat tiga buah menu: Text, Link, dan File. Pilih salah satu menu sesuai dengan metode input yang ingin anda gunakan.
