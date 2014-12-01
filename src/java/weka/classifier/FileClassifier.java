@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import static java.lang.System.out;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -182,13 +183,15 @@ public class FileClassifier {
         
         Instances labeled = classify(trainingSet,unlabeled,className);
         
+        
         CSVSaver saver = new CSVSaver();
         saver.setInstances(labeled);
         
-        File F = new File("/data/output.csv");
+        File F = new File("/output.csv");
         if(F.exists()){
             F.delete();
         }
+        F.createNewFile();
         saver.setFile(F);
         saver.writeBatch();
         
@@ -197,8 +200,9 @@ public class FileClassifier {
     
     public void downloadFile() throws IOException
     {
-        File file = new File("data/output.csv");
+        File file = new File("/output.csv");
         InputStream fis = new FileInputStream(file);
+        
         byte[] buf = new byte[1024];
         int offset = 0;
         int numRead = 0;
